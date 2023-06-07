@@ -527,10 +527,10 @@ async def cb_handler(client: Client, query: CallbackQuery):
 
     elif query.data == "start":                        
         buttons = [[
-            InlineKeyboardButton("➕️ 𝙳𝙸𝚂𝙲𝚄𝚂𝚂𝙸𝙾𝙽 𝙶𝚁𝙾𝚄𝙿 ➕️", url=f"https://t.me/Movie_Downloader_World")
+            InlineKeyboardButton("➕️ ➕ 𝙰𝙳𝙳 𝙼𝙴 𝚃𝙾 𝚈𝙾𝚄𝚁 𝙶𝚁𝙾𝚄𝙿 ➕️", url=f"http://t.me/Hd_Movies_Download_bot?startgroup=true")
             ],[
-            InlineKeyboardButton("🔍 𝚂𝙴𝙰𝚁𝙲𝙷 🔍", switch_inline_query_current_chat=''), 
-            InlineKeyboardButton("📢 𝚄𝙿𝙳𝙰𝚃𝙴𝚂 📢", url="https://t.me/Movies_X_Store")
+            InlineKeyboardButton("🔍 𝚂𝙴𝙰𝚁𝙲𝙷 🔍", url=f"https://t.me/Movie_Downloader_World_Bot"), 
+            InlineKeyboardButton("📢 𝙹𝙾𝙸𝙽 𝙾𝚄𝚁 𝙲𝙷𝙰𝙽𝙽𝙴𝙻 📢", url=f"https://t.me/Movies_X_Store")
             ],[
             InlineKeyboardButton("♻️ 𝙷𝙴𝙻𝙿 ♻️", callback_data="help"),
             InlineKeyboardButton("💫 𝙰𝙱𝙾𝚄𝚃 💫", callback_data="about")
