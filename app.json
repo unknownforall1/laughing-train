@@ -1,15 +1,15 @@
 {
-    "name": "SNOWBALL-BOT",
+    "name": "Movie-BOT",
     "description": "the telegram Autofilter bot",
     "logo": "./Logo/Snowball.jpg",
     "keywords": ["telegram", "auto-filter"],
     "stack": "container",
-    "website": "https://t.me/Kdramaland_Official",
+    "website": "https://t.me/Movies_X_Store",
     "repository": "NONE",
     "env": {
         "WEBHOOK": {
             "description": "True/False if your server is web support required? the value is True else False",
-            "required": true
+            "required": False
         },
         "BOT_TOKEN": {
             "description": "Your bot token.",
