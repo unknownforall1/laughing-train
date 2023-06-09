@@ -38,9 +38,10 @@ async def start(client, message):
         await client.send_message(LOG_CHANNEL, script.LOG_TEXT_P.format(message.from_user.id, message.from_user.mention, message.from_user.username, temp.U_NAME))
     if len(message.command) != 2:
         buttons = [[
-            InlineKeyboardButton("➕️𝙼𝙾𝚅𝙸𝙴 𝚂𝙴𝙰𝚁𝙲𝙷 𝙶𝚁𝙾𝚄𝙿➕️", url=f"https://t.me/+hIV2BKmtOEc5ZDE1")
+            InlineKeyboardButton("➕️ 𝙳𝙸𝚂𝙲𝚄𝚂𝚂𝙸𝙾𝙽 𝙶𝚁𝙾𝚄𝙿 ➕️", url=f"https://t.me/+hIV2BKmtOEc5ZDE1")
             ],[
-            InlineKeyboardButton("📢 𝙲𝙷𝙰𝙽𝙽𝙴𝙻 📢", url="https://t.me/Movies_X_store")
+            InlineKeyboardButton("🔍 𝚂𝙴𝙰𝚁𝙲𝙷 🔍", switch_inline_query_current_chat=''), 
+            InlineKeyboardButton("📢 𝚄𝙿𝙳𝙰𝚃𝙴𝚂 📢", url="https://t.me/Movies_X_store")
             ],[      
             InlineKeyboardButton("♻️ 𝙷𝙴𝙻𝙿 ♻️", callback_data="help"),
             InlineKeyboardButton("💫 𝙰𝙱𝙾𝚄𝚃 💫", callback_data="about")
@@ -86,10 +87,11 @@ async def start(client, message):
             )
         return
     if len(message.command) == 2 and message.command[1] in ["subscribe", "error", "okay", "help"]:
-       buttons = [[
-            InlineKeyboardButton("➕️𝙼𝙾𝚅𝙸𝙴 𝚂𝙴𝙰𝚁𝙲𝙷 𝙶𝚁𝙾𝚄𝙿➕️", url=f"https://t.me/+hIV2BKmtOEc5ZDE1")
+        buttons = [[
+            InlineKeyboardButton("➕️ 𝙳𝙸𝚂𝙲𝚄𝚂𝚂𝙸𝙾𝙽 𝙶𝚁𝙾𝚄𝙿 ➕️", url=f"https://t.me/+hIV2BKmtOEc5ZDE1")
             ],[
-            InlineKeyboardButton("📢 𝙲𝙷𝙰𝙽𝙽𝙴𝙻 📢", url="https://t.me/Movies_X_store")
+            InlineKeyboardButton("🔍 𝚂𝙴𝙰𝚁𝙲𝙷 🔍", switch_inline_query_current_chat=''), 
+            InlineKeyboardButton("📢 𝚄𝙿𝙳𝙰𝚃𝙴𝚂 📢", url="https://t.me/Movies_X_store")
             ],[      
             InlineKeyboardButton("♻️ 𝙷𝙴𝙻𝙿 ♻️", callback_data="help"),
             InlineKeyboardButton("💫 𝙰𝙱𝙾𝚄𝚃 💫", callback_data="about")
