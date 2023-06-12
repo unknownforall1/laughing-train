@@ -38,7 +38,7 @@ async def start(client, message):
         await client.send_message(LOG_CHANNEL, script.LOG_TEXT_P.format(message.from_user.id, message.from_user.mention, message.from_user.username, temp.U_NAME))
     if len(message.command) != 2:
         buttons = [[
-            InlineKeyboardButton("➕️ 𝙳𝙸𝚂𝙲𝚄𝚂𝚂𝙸𝙾𝙽 𝙶𝚁𝙾𝚄𝙿 ➕️", url=f"https://t.me/+hIV2BKmtOEc5ZDE1")
+            InlineKeyboardButton("➕️ 𝙹𝚘𝚒𝚗 𝙾𝚞𝚛 𝙼𝚘𝚟𝚒𝚎 𝙶𝚛𝚘𝚞𝚙 ➕️", url=f"https://t.me/+f9Tyf38SxHQxMjk9")
             ],[
             InlineKeyboardButton("🔍 𝚂𝙴𝙰𝚁𝙲𝙷 🔍", switch_inline_query_current_chat=''), 
             InlineKeyboardButton("📢 𝚄𝙿𝙳𝙰𝚃𝙴𝚂 📢", url="https://t.me/Movies_X_store")
@@ -88,7 +88,7 @@ async def start(client, message):
         return
     if len(message.command) == 2 and message.command[1] in ["subscribe", "error", "okay", "help"]:
         buttons = [[
-            InlineKeyboardButton("➕️ 𝙳𝙸𝚂𝙲𝚄𝚂𝚂𝙸𝙾𝙽 𝙶𝚁𝙾𝚄𝙿 ➕️", url=f"https://t.me/+hIV2BKmtOEc5ZDE1")
+            InlineKeyboardButton("➕️ 𝙹𝚘𝚒𝚗 𝙾𝚞𝚛 𝙼𝚘𝚟𝚒𝚎 𝙶𝚛𝚘𝚞𝚙 ➕️", url=f"htts://t.me/+f9Tyf38SxHQxMjk9")
             ],[
             InlineKeyboardButton("🔍 𝚂𝙴𝙰𝚁𝙲𝙷 🔍", switch_inline_query_current_chat=''), 
             InlineKeyboardButton("📢 𝚄𝙿𝙳𝙰𝚃𝙴𝚂 📢", url="https://t.me/Movies_X_store")
