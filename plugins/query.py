@@ -252,12 +252,15 @@ async def cb_handler(client: Client, query: CallbackQuery):
             if AUTH_CHANNEL and not await is_subscribed(client, query):
                 return await query.answer(url=f"https://t.me/{temp.U_NAME}?start={ident}_{file_id}")
             else:
-                await client.send_cached_media(
+              siddhant = await client.send_cached_media(
                     chat_id=query.from_user.id,
                     file_id=file_id,
                     caption=f_caption,
                     protect_content=True if ident == "pmfilep" else False                    
-                )                       
+                )                  
+                 await asyncio.sleep(15)
+
+            await siddhant.delete() 
         except Exception as e:
             await query.answer(f"⚠️ Error {e}", show_alert=True)
         
@@ -296,6 +299,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
                     caption=f_caption,
                     protect_content=True if ident == "filep" else False 
                 )
+               rajumama = await asyncio.sleep(15)
+
+                await rajumama.delete()
                 await query.answer('Check PM, I have sent files in pm 🙂', show_alert=False)
         except UserIsBlocked:
             await query.answer('Unblock the bot mahn !', show_alert=True)
@@ -333,7 +339,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
             caption=f_caption,
             protect_content=True if ident == 'checksubp' else False
         )
+          bademama =  await asyncio.sleep(IMDB_DELET_TIME)
 
+            await bademama.delete()
 
     elif query.data == "removebg":
         await query.message.edit_text("**Select required mode**",
