@@ -4,7 +4,7 @@ from info import AUTH_CHANNEL, LONG_IMDB_DESCRIPTION, MAX_LIST_ELM, SHORT_URL, S
 from imdb import Cinemagoer
 import asyncio
 from pyrogram.types import Message, InlineKeyboardButton
-from pyrogram import enums
+from pyrogram import enums, Client
 from typing import Union
 import re
 import os
@@ -41,8 +41,14 @@ class temp(object):
     B_LINK = None
     SETTINGS = {}
     BUTTONS = {}
-    
+    SPELL_CHECK = {}
+    PM_BUTTONS = {}
+    PM_SPELL_CHECK = {}
 
+
+async def auto_delete_files(client, chatid, msg_file_id, time_sec):
+    await asyncio.sleep(time_sec)
+    await Client.delete_messages(client, chat_id= chatid, message_ids= msg_file_id)
 
 async def is_subscribed(bot, query):
     try:
@@ -139,9 +145,9 @@ async def get_poster(query, bulk=False, id=False, file=None):
         'url':f'https://www.imdb.com/title/tt{movieid}'
     }
 # https://github.com/odysseusmax/animated-lamp/blob/2ef4730eb2b5f0596ed6d03e7b05243d93e3415b/bot/utils/broadcast.py#L37
-__repo__ = 'None'
-__license__ = 'None'
-__copyright__ = 'None'
+__repo__ = "https://github.com/MrMKN/PROFESSOR-BOT"
+__license__ = "GNU GENERAL PUBLIC LICENSE V2"
+__copyright__ = "Copyright (C) 2023-present MrMKN <https://github.com/MrMKN>"
 
 async def search_gagala(text):
     usr_agent = {
