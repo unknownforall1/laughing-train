@@ -1,32 +1,26 @@
-import asyncio, re, ast, math, logging, random, pyrogram
-
-# pyrogram functions
+import asyncio, re, ast, math, logging, random 
 from pyrogram.errors.exceptions.bad_request_400 import MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
+from Script import script
+import pyrogram
+from database.connections_mdb import active_connection, all_connections, delete_connection, if_active, make_active, make_inactive
+from info import ADMINS, AUTH_CHANNEL, AUTH_USERS, CUSTOM_FILE_CAPTION, AUTH_GROUPS, P_TTI_SHOW_OFF, PICS, IMDB, PM_IMDB, SINGLE_BUTTON, PROTECT_CONTENT, \
+    SPELL_CHECK_REPLY, IMDB_TEMPLATE, IMDB_DELET_TIME, START_MESSAGE, PMFILTER, G_FILTER, BUTTON_LOCK, BUTTON_LOCK_TEXT, SHORT_URL, SHORT_API
+
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, InputMediaPhoto
 from pyrogram import Client, filters, enums 
 from pyrogram.errors import FloodWait, UserIsBlocked, MessageNotModified, PeerIdInvalid
-
-
-from Script import script
-from database.connections_mdb import active_connection, all_connections, delete_connection, if_active, make_active, make_inactive
-from utils import get_size, is_subscribed, get_poster, search_gagala, temp, get_settings, save_group_settings, get_shortlink
+from utils import get_size, is_subscribed, get_poster, search_gagala, temp, get_settings, save_group_settings, get_shortlink, auto_delete_files
 from database.users_chats_db import db
-from database.ia_filterdb import Media, get_file_details, get_search_results, get_all_files
+from database.ia_filterdb import Media, get_file_details, get_search_results
 from database.filters_mdb import del_all, find_filter, get_filters
 from database.gfilters_mdb import find_gfilter, get_gfilters
 from plugins.helper.admin_check import admin_fliter
 
-# image editor tools
 from image.edit_1 import bright, mix, black_white, g_blur, normal_blur, box_blur
 from image.edit_2 import circle_with_bg, circle_without_bg, sticker, edge_curved, contrast, sepia_mode, pencil, cartoon                             
 from image.edit_3 import green_border, blue_border, black_border, red_border
 from image.edit_4 import rotate_90, rotate_180, rotate_270, inverted, round_sticker, removebg_white, removebg_plain, removebg_sticker
 from image.edit_5 import normalglitch_1, normalglitch_2, normalglitch_3, normalglitch_4, normalglitch_5, scanlineglitch_1, scanlineglitch_2, scanlineglitch_3, scanlineglitch_4, scanlineglitch_5
-
-# configuration
-from info import ADMINS, AUTH_CHANNEL, AUTH_USERS, CUSTOM_FILE_CAPTION, AUTH_GROUPS, P_TTI_SHOW_OFF, PICS, IMDB, PM_IMDB, SINGLE_BUTTON, PROTECT_CONTENT, \
-    SPELL_CHECK_REPLY, IMDB_TEMPLATE, IMDB_DELET_TIME, START_MESSAGE, PMFILTER, G_FILTER, BUTTON_LOCK, BUTTON_LOCK_TEXT, SHORT_URL, SHORT_API
-
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
@@ -53,7 +47,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                     return await query.answer('𝙿𝙻𝙴𝙰𝚂𝙴 𝚂𝙷𝙰𝚁𝙴 𝙰𝙽𝙳 𝚂𝚄𝙿𝙿𝙾𝚁𝚃')
             else:
                 await query.message.edit_text(
-                    "I'm not connected to any groups!\nCheck /connections or connect to any groups",
+                    "I'm not connected to any groups!\nCheck /gconnections or /gconnect to any groups",
                     quote=True
                 )
                 return
@@ -230,7 +224,14 @@ async def cb_handler(client: Client, query: CallbackQuery):
             alert = alerts[int(i)]
             alert = alert.replace("\\n", "\n").replace("\\t", "\t")
             await query.answer(alert, show_alert=True)
-    
+    elif query.data.startswith("next"):
+       await next_page(client, query)
+    elif query.data.startswith("spolling"):
+       await advantage_spoll_choker(client, query)
+    elif query.data.startswith("pmnext"):
+       await pm_next_page(client, query)
+    elif query.data.startswith("pmspolling"):
+       await pm_spoll_tester(client, query)
     if query.data.startswith("pmfile"):
         ident, file_id = query.data.split("#")
         files_ = await get_file_details(file_id)
@@ -250,14 +251,17 @@ async def cb_handler(client: Client, query: CallbackQuery):
             f_caption = f"{files.file_name}"    
         try:                  
             if AUTH_CHANNEL and not await is_subscribed(client, query):
-                return await query.answer(url=f"https://t.me/{temp.U_NAME}?start={ident}_{file_id}")
+                must_del = await query.answer(url=f"https://t.me/{temp.U_NAME}?start={ident}_{file_id}")
+                return await auto_delete_files(client, query.from_user.id, must_del.id, 600)
+
             else:
-                await client.send_cached_media(
+                must_del = await client.send_cached_media(
                     chat_id=query.from_user.id,
                     file_id=file_id,
                     caption=f_caption,
                     protect_content=True if ident == "pmfilep" else False                    
                 )                       
+                await auto_delete_files(client, query.from_user.id, must_del.id, 600)
         except Exception as e:
             await query.answer(f"⚠️ Error {e}", show_alert=True)
         
@@ -284,31 +288,35 @@ async def cb_handler(client: Client, query: CallbackQuery):
             f_caption = f"{files.file_name}"        
         try:
             if AUTH_CHANNEL and not await is_subscribed(client, query):
-                await query.answer(url=f"https://t.me/{temp.U_NAME}?start={ident}_{file_id}")
+                must_del = await query.answer(url=f"https://t.me/{temp.U_NAME}?start={ident}_{file_id}")
+                await auto_delete_files(client, query.from_user.id, must_del.id, 600)
                 return
             elif settings['botpm']:
-                await query.answer(url=f"https://t.me/{temp.U_NAME}?start={ident}_{file_id}")
+                must_del = await query.answer(url=f"https://t.me/{temp.U_NAME}?start={ident}_{file_id}")
+                await auto_delete_files(client, query.from_user.id, must_del.id, 600)
                 return
             else:
-                await client.send_cached_media(
+                must_del = await client.send_cached_media(
                     chat_id=query.from_user.id,
                     file_id=file_id,
                     caption=f_caption,
                     protect_content=True if ident == "filep" else False 
                 )
-                await query.answer('Check PM, I have sent files in pm 🙂', show_alert=False)
+                await query.answer('Check PM, I have sent files in pm. Enjoy the film. ', show_alert=True)
+                await auto_delete_files(client, query.from_user.id, must_del.id, 600)
+                
         except UserIsBlocked:
-            await query.answer('Unblock the bot mahn !', show_alert=True)
+            await query.answer('Hey Unblock me. Then only I can send you!', show_alert=True)
         except PeerIdInvalid:
-            await query.answer(url=f"https://t.me/{temp.U_NAME}?start={ident}_{file_id}")
+            must_del = await query.answer(url=f"https://t.me/{temp.U_NAME}?start={ident}_{file_id}")
+            await auto_delete_files(client, query.from_user.id, must_del.id, 600)
         except Exception as e:
-            await query.answer(url=f"https://t.me/{temp.U_NAME}?start={ident}_{file_id}")
-    
-     
-      
+            must_del = await query.answer(url=f"https://t.me/{temp.U_NAME}?start={ident}_{file_id}")
+            await auto_delete_files(client, query.from_user.id, must_del.id, 600)
+        
     elif query.data.startswith("checksub"):
         if AUTH_CHANNEL and not await is_subscribed(client, query):
-            await query.answer("I Like Your Smartness, But Don't Be Oversmart Okay", show_alert=True)
+            await query.answer("I Like Your Smartness, But Don't Try to Play with me. Just join and strat me again ", show_alert=True)
             return
         ident, file_id = query.data.split("#")
         files_ = await get_file_details(file_id)
@@ -515,25 +523,20 @@ async def cb_handler(client: Client, query: CallbackQuery):
         await removebg_plain(client, query.message)
     elif query.data == "rmbgsticker":
         await removebg_sticker(client, query.message)
-
     elif query.data == "pages":
         await query.answer("🤨 Curiosity is a little more, isn't it? 😁", show_alert=True)
-    elif query.data == "howdl":
-        try:
-            await query.answer(script.HOW_TO_DOWNLOAD.format(query.from_user.first_name), show_alert=True)
-        except:
-            await query.message.edit(script.HOW_TO_DOWNLOAD.format(query.from_user.first_name))
-
 
     elif query.data == "start":                        
         buttons = [[
-            InlineKeyboardButton("➕️ 𝙳𝙸𝚂𝙲𝚄𝚂𝚂𝙸𝙾𝙽 𝙶𝚁𝙾𝚄𝙿 ➕️", url=f"https://t.me/+mCdsJ7mjeBEyZWQ1")
+            InlineKeyboardButton("➕️ 𝙰𝙳𝙳 𝙼𝙴 𝚃𝙾 𝚈𝙾𝚄𝚁 𝙶𝚁𝙾𝚄𝙿 ➕️", url=f"http://t.me/{temp.U_NAME}?startgroup=true")
             ],[
             InlineKeyboardButton("🔍 𝚂𝙴𝙰𝚁𝙲𝙷 🔍", switch_inline_query_current_chat=''), 
-            InlineKeyboardButton("📢 𝚄𝙿𝙳𝙰𝚃𝙴𝚂 📢", url="https://t.me/+yYhfz5JwILhmODc9")
+            InlineKeyboardButton("📢 𝚄𝙿𝙳𝙰𝚃𝙴𝚂 📢", url="https://t.me/llathu63035")
             ],[
-            InlineKeyboardButton("♻️ 𝙷𝙴𝙻𝙿 ♻️", callback_data="help"),
+            InlineKeyboardButton("ℹ️ 𝙷𝙴𝙻𝙿 ℹ️", callback_data="help"),
             InlineKeyboardButton("💫 𝙰𝙱𝙾𝚄𝚃 💫", callback_data="about")
+            ],[
+            InlineKeyboardButton("😎🇴 🇼 🇳 🇪 🇷 😎", url=f"https://t.me/TG_LATHEESH")
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
         await query.edit_message_media(
@@ -609,6 +612,8 @@ async def cb_handler(client: Client, query: CallbackQuery):
         )
     elif query.data == "about":
         buttons= [[
+            InlineKeyboardButton('❣️ 𝚂𝙾𝚄𝚁𝙲𝙴 𝙲𝙾𝙳𝙴 ❣️', callback_data='source')
+            ],[
             InlineKeyboardButton('🏠 𝙷𝙾𝙼𝙴 🏠', callback_data='start'),
             InlineKeyboardButton('🔐 𝙲𝙻𝙾𝚂𝙴 🔐', callback_data='close_data')
         ]]
@@ -616,6 +621,17 @@ async def cb_handler(client: Client, query: CallbackQuery):
         await query.edit_message_media(
             InputMediaPhoto(random.choice(PICS), script.ABOUT_TXT.format(temp.B_NAME), enums.ParseMode.HTML),
             reply_markup=reply_markup,           
+        )
+    elif query.data == "source":
+        buttons = [[
+            InlineKeyboardButton('SOURCE CODE', url='https://t.me/llathu63035')
+            ],[
+            InlineKeyboardButton('👩‍🦯 Back', callback_data='about')
+        ]]
+        reply_markup = InlineKeyboardMarkup(buttons)
+        await query.edit_message_media(
+            InputMediaPhoto(random.choice(PICS), script.SOURCE_TXT, enums.ParseMode.HTML),
+            reply_markup=reply_markup,            
         )
     elif query.data == "restric":
         buttons = [[
@@ -786,7 +802,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         if query.from_user.id in ADMINS:
             await query.edit_message_media(InputMediaPhoto(random.choice(PICS), script.ADMIN_TXT, enums.ParseMode.HTML), reply_markup=reply_markup)
         else:
-            await query.answer("Your Not Authorizer ⚠️", show_alert=True)
+            await query.answer("Your Not Admin Of The Bot ⚠️", show_alert=True)
 
     elif query.data == "gfill":
         buttons = [[            
@@ -864,6 +880,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
             InputMediaPhoto(random.choice(PICS), script.STATUS_TXT.format(total, users, chats, monsize, free), enums.ParseMode.HTML),
             reply_markup=reply_markup,          
       )
+
+
+
 
     elif query.data.startswith("setgs"):
         ident, set_type, status, grp_id = query.data.split("#")
