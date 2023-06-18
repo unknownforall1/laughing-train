@@ -252,14 +252,12 @@ async def cb_handler(client: Client, query: CallbackQuery):
             if AUTH_CHANNEL and not await is_subscribed(client, query):
                 return await query.answer(url=f"https://t.me/{temp.U_NAME}?start={ident}_{file_id}")
             else:
-              siddhant = await client.send_cached_media(
+                 await client.send_cached_media(
                     chat_id=query.from_user.id,
                     file_id=file_id,
                     caption=f_caption,
                     protect_content=True if ident == "pmfilep" else False                    
-                )                  
-            await asyncio.sleep(15)
-            await siddhant.delete() 
+                ) 
         except Exception as e:
             await query.answer(f"⚠️ Error {e}", show_alert=True)
         
@@ -292,14 +290,14 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 await query.answer(url=f"https://t.me/{temp.U_NAME}?start={ident}_{file_id}")
                 return
             else:
-            rajumama = await client.send_cached_media(
+            await client.send_cached_media(
                     chat_id=query.from_user.id,
                     file_id=file_id,
                     caption=f_caption,
                     protect_content=True if ident == "filep" else False 
                 )
-                await asyncio.sleep(15)
-                await rajumama.delete()
+
+
                 
                 await query.answer('Check PM, I have sent files in pm 🙂', show_alert=False)
         except UserIsBlocked:
@@ -332,14 +330,12 @@ async def cb_handler(client: Client, query: CallbackQuery):
         if f_caption is None:
             f_caption = f"{title}"
         await query.answer()
-       bademama = await client.send_cached_media(
+        await client.send_cached_media(
             chat_id=query.from_user.id,
             file_id=file_id,
             caption=f_caption,
             protect_content=True if ident == 'checksubp' else False
         )
-        await asyncio.sleep(15)
-        await bademama.delete()
 
     elif query.data == "removebg":
         await query.message.edit_text("**Select required mode**",
