@@ -6,6 +6,7 @@ COPY requirements.txt /requirements.txt
 
 RUN cd /
 RUN pip3 install -U pip3 && pip3 install -U -r requirements.txt
+RUN mkdir /app
 WORKDIR /app
 
 COPY . .
