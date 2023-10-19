@@ -17,6 +17,9 @@ umongo==3.0.1
 motor==2.5.1
 
 #---ytdl----#
+youtube-search-python
+youtube-search
+yt-dlp==2023.2.17
 
 #---imdb---#
 git+https://github.com/cinemagoer/cinemagoer
@@ -26,7 +29,7 @@ git+https://github.com/dsdanielpark/Bard-API.git
 
 #---others----#
 opencv-python-headless==4.7.0.68
-googletrans==3.1.0a0
+googletrans
 telegraph==2.2.0
 python-dotenv==0.21.1
 gTTS==2.3.1
