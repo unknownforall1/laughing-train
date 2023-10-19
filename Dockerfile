@@ -8,6 +8,6 @@ RUN cd /
 RUN pip3 install -U pip && pip3 install -U -r requirements.txt
 WORKDIR /app
 
-COPY . .
+COPY start.sh /start.sh
 
 CMD ["python", "bot.py"]
