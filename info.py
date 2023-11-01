@@ -59,7 +59,7 @@ G_FILTER = bool(environ.get("G_FILTER", True))
 BUTTON_LOCK = environ.get("BUTTON_LOCK", "True")
 MAX_B_TN = environ.get("MAX_B_TN", "10")
 MAX_BTN = is_enabled((environ.get('MAX_BTN', "True")), True)
-
+AUTO_DELETE = is_enabled((environ.get('AUTO_DELETE', "True")), True)
 #search 🔍 by language , season and quality 
 
 QUALITY = ["240", "360", "480", "720", "1080", "4k", "8k" ]
