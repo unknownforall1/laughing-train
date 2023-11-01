@@ -112,7 +112,7 @@ async def pm_spoll_tester(bot, query):
         k = (movie, files, offset, total_results)
         await pm_AutoFilter(bot, query, k)
     else:
-        k = await query.message.edit('This Movie Not Found In DataBase\n Search in given group you'll get results', reply_markup=InlineKeyboardMarkup(bklnd))
+        k = await query.message.edit('This Movie Not Found In DataBase Search in given group you will get results', reply_markup=InlineKeyboardMarkup(bklnd))
         await asyncio.sleep(10)
         await k.delete()
 
