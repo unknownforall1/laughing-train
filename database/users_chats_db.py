@@ -1,6 +1,6 @@
 # https://github.com/odysseusmax/animated-lamp/blob/master/bot/database/database.py
 import motor.motor_asyncio
-from info import DATABASE_NAME, DATABASE_URI, IMDB, IMDB_TEMPLATE, MELCOW_NEW_USERS, P_TTI_SHOW_OFF, SINGLE_BUTTON, SPELL_CHECK_REPLY, PROTECT_CONTENT, MAX_RIST_BTNS, IMDB_DELET_TIME                  
+from info import DATABASE_NAME, DATABASE_URI, IMDB, IMDB_TEMPLATE, MELCOW_NEW_USERS, P_TTI_SHOW_OFF, SINGLE_BUTTON, SPELL_CHECK_REPLY, PROTECT_CONTENT, AUTO_DELETE, MAX_BTN, AUTO_FFILTER, SHORTLINK_API, SHORTLINK_URL, IS_SHORTLINK
 
 class Database:
     
@@ -21,17 +21,32 @@ class Database:
             ),
         )
 
-
-    def new_group(self, id, title, username):
+    def new_group(self, id, title):
         return dict(
             id = id,
             title = title,
-            username = username,
             chat_status=dict(
                 is_disabled=False,
                 reason="",
             ),
         )
+    
+    async def update_verification(self, id, date, time):
+        status = {
+            'date': str(date),
+            'time': str(time)
+        }
+        await self.col.update_one({'id': int(id)}, {'$set': {'verification_status': status}})
+
+    async def get_verified(self, id):
+        default = {
+            'date': "1999-12-31",
+            'time': "23:59:59"
+        }
+        user = await self.col.find_one({'id': int(id)})
+        if user:
+            return user.get("verification_status", default)
+        return default
     
     async def add_user(self, id, name):
         user = self.new_user(id, name)
@@ -76,8 +91,6 @@ class Database:
     async def delete_user(self, user_id):
         await self.col.delete_many({'id': int(user_id)})
 
-    async def delete_chat(self, chat_id):
-        await self.grp.delete_many({'id': int(chat_id)})
 
     async def get_banned(self):
         users = self.col.find({'ban_status.is_banned': True})
@@ -88,8 +101,8 @@ class Database:
     
 
 
-    async def add_chat(self, chat, title, username):
-        chat = self.new_group(chat, title, username)
+    async def add_chat(self, chat, title):
+        chat = self.new_group(chat, title)
         await self.grp.insert_one(chat)
     
 
@@ -109,7 +122,7 @@ class Database:
         await self.grp.update_one({'id': int(id)}, {'$set': {'settings': settings}})
         
     
-    async def get_settings(self, id):       
+    async def get_settings(self, id):
         default = {
             'button': SINGLE_BUTTON,
             'botpm': P_TTI_SHOW_OFF,
@@ -117,13 +130,19 @@ class Database:
             'imdb': IMDB,
             'spell_check': SPELL_CHECK_REPLY,
             'welcome': MELCOW_NEW_USERS,
-            'template': IMDB_TEMPLATE            
+            'auto_delete': AUTO_DELETE,
+            'auto_ffilter': AUTO_FFILTER,
+            'max_btn': MAX_BTN,
+            'template': IMDB_TEMPLATE,
+            'shortlink': SHORTLINK_URL,
+            'shortlink_api': SHORTLINK_API,
+            'is_shortlink': IS_SHORTLINK
         }
         chat = await self.grp.find_one({'id':int(id)})
         if chat:
             return chat.get('settings', default)
         return default
-
+    
 
     async def disable_chat(self, chat, reason="No Reason"):
         chat_status=dict(
@@ -144,6 +163,5 @@ class Database:
 
     async def get_db_size(self):
         return (await self.db.command("dbstats"))['dataSize']
-
 
 db = Database(DATABASE_URI, DATABASE_NAME)
