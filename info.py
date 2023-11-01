@@ -57,7 +57,8 @@ WELCOM_TEXT = environ.get("WELCOM_TEXT", "Hai {user}\nwelcome to {chat}")
 PMFILTER = environ.get('PMFILTER', "True")
 G_FILTER = bool(environ.get("G_FILTER", True))
 BUTTON_LOCK = environ.get("BUTTON_LOCK", "True")
-
+MAX_B_TN = environ.get("MAX_B_TN", "10")
+MAX_BTN = is_enabled((environ.get('MAX_BTN', "True")), True)
 
 #search 🔍 by language , season and quality 
 
