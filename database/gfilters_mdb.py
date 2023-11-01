@@ -1,3 +1,5 @@
+# Kanged From https://github.com/KDBotz/LUCIFER
+
 import pymongo
 from info import DATABASE_URI, DATABASE_NAME
 from pyrogram import enums
@@ -6,7 +8,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
 
 myclient = pymongo.MongoClient(DATABASE_URI)
-mydb = myclient[DATABASE_NAME]
+mydb = myclient["GlobalFilters"]
 
 
 
@@ -78,15 +80,15 @@ async def delete_gfilter(message, text, gfilters):
 
 async def del_allg(message, gfilters):
     if str(gfilters) not in mydb.list_collection_names():
-        await message.edit_text("Nothing to remove !")
+        await message.edit_text("Nothin!")
         return
 
     mycol = mydb[str(gfilters)]
     try:
         mycol.drop()
-        await message.edit_text(f"All gfilters has been removed !")
+        await message.edit_text(f"All filters has been removed")
     except:
-        await message.edit_text("Couldn't remove all gfilters !")
+        await message.edit_text("Couldn't remove all filters!")
         return
 
 async def count_gfilters(gfilters):

@@ -1,12 +1,12 @@
 import pymongo
+from pyrogram import enums 
 from info import DATABASE_URI, DATABASE_NAME
-from pyrogram import enums
 import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
 
 myclient = pymongo.MongoClient(DATABASE_URI)
-mydb = myclient[DATABASE_NAME]
+mydb = myclient["ManualFilters"]
 
 
 
@@ -95,7 +95,10 @@ async def count_filters(group_id):
     mycol = mydb[str(group_id)]
 
     count = mycol.count()
-    return False if count == 0 else count
+    if count == 0:
+        return False
+    else:
+        return count
 
 
 async def filter_stats():
