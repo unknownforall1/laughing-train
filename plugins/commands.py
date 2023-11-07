@@ -41,7 +41,7 @@ async def start(client, message):
             InlineKeyboardButton("➕️ 𝙹𝚘𝚒𝚗 𝙾𝚞𝚛 𝙼𝚘𝚟𝚒𝚎 𝙶𝚛𝚘𝚞𝚙 ➕️", url=f"https://t.me/+aEYTJtwZpalmM2Jl")
             ],[
             InlineKeyboardButton("🔍 𝚂𝙴𝙰𝚁𝙲𝙷 🔍", switch_inline_query_current_chat=''), 
-            InlineKeyboardButton("📢 𝚄𝙿𝙳𝙰𝚃𝙴𝚂 📢", url="https://t.me/Movies_X_store")
+            InlineKeyboardButton("📢 𝚄𝙿𝙳𝙰𝚃𝙴𝚂 📢", url=f"https://t.me/Movies_X_store")
             ],[      
             InlineKeyboardButton("♻️ 𝙷𝙴𝙻𝙿 ♻️", callback_data="help"),
             InlineKeyboardButton("💫 𝙰𝙱𝙾𝚄𝚃 💫", callback_data="about")
@@ -88,10 +88,10 @@ async def start(client, message):
         return
     if len(message.command) == 2 and message.command[1] in ["subscribe", "error", "okay", "help"]:
         buttons = [[
-            InlineKeyboardButton("➕️ 𝙹𝚘𝚒𝚗 𝙾𝚞𝚛 𝙼𝚘𝚟𝚒𝚎 𝙶𝚛𝚘𝚞𝚙 ➕️", url="https://t.me/+aEYTJtwZpalmM2Jl")
+            InlineKeyboardButton("➕️ 𝙹𝚘𝚒𝚗 𝙾𝚞𝚛 𝙼𝚘𝚟𝚒𝚎 𝙶𝚛𝚘𝚞𝚙 ➕️", url=f"https://t.me/+aEYTJtwZpalmM2Jl")
             ],[
             InlineKeyboardButton("🔍 𝚂𝙴𝙰𝚁𝙲𝙷 🔍", switch_inline_query_current_chat=''), 
-            InlineKeyboardButton("📢 𝚄𝙿𝙳𝙰𝚃𝙴𝚂 📢", url="https://t.me/Movies_X_store")
+            InlineKeyboardButton("📢 𝚄𝙿𝙳𝙰𝚃𝙴𝚂 📢", url=f"https://t.me/Movies_X_store")
             ],[      
             InlineKeyboardButton("♻️ 𝙷𝙴𝙻𝙿 ♻️", callback_data="help"),
             InlineKeyboardButton("💫 𝙰𝙱𝙾𝚄𝚃 💫", callback_data="about")
