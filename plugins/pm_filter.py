@@ -95,8 +95,6 @@ async def pm_next_page(bot, query):
     await query.answer()
 
 
-bklnd=[InlineKeyboardButton("🔎 SEARCH HERE 🔍", url="https://t.me/+aEYTJtwZpalmM2Jl")]
-
 @Client.on_callback_query(filters.regex("pmspelling"))
 async def pm_spoll_tester(bot, query):
     _, user, movie_ = query.data.split('#')
@@ -112,7 +110,7 @@ async def pm_spoll_tester(bot, query):
         k = (movie, files, offset, total_results)
         await pm_AutoFilter(bot, query, k)
     else:
-        k = await query.message.edit('This Movie Not Found In DataBase Search in given group you will get results', reply_markup=InlineKeyboardMarkup(bklnd))
+        k = await query.message.edit('This Movie Not Found In DataBase')
         await asyncio.sleep(10)
         await k.delete()
 
@@ -143,7 +141,7 @@ async def pm_AutoFilter(client, msg, pmspoll=False):
                     InlineKeyboardButton(text=f"{get_size(file.file_size)}", url=await get_shortlink(f"https://telegram.dog/{temp.U_NAME}?start=pre_{file.file_id}"))] for file in files ]
     else:        
         if SINGLE_BUTTON:
-            btn = [[InlineKeyboardButton(text=f"[{get_size(file.file_size)}] {file.file_name}", callback_data=f'{pre}#{file.file_id}')] for file in files ]
+            btn = [[InlineKeyboardButton(text=f"[{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}",, callback_data=f'{pre}#{file.file_id}')] for file in files ]
         else:
             btn = [[InlineKeyboardButton(text=f"{file.file_name}", callback_data=f'{pre}#{req}#{file.file_id}'),
                     InlineKeyboardButton(text=f"{get_size(file.file_size)}", callback_data=f'{pre}#{file.file_id}')] for file in files ]    
@@ -233,8 +231,8 @@ async def pm_spoll_choker(msg):
     g_s += await search_gagala(msg.text)
     gs_parsed = []
     if not g_s:
-        k = await msg.reply(" Search in given group you will get results", reply_markup=InlineKeyboardMarkup(bklnd))
-        await asyncio.sleep(25)
+        k = await msg.reply("I couldn't find any movie in that name.")
+        await asyncio.sleep(8)
         await k.delete()
         return
     regex = re.compile(r".*(imdb|wikipedia).*", re.IGNORECASE)  # look for imdb / wiki results
