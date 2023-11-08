@@ -228,6 +228,8 @@ async def start(client, message):
                 except:
                     return
             await msg.edit_caption(f_caption)
+            await asyncio.sleep(600)
+            await msg.delete()
             return
         except:
             pass
@@ -250,6 +252,8 @@ async def start(client, message):
         caption=f_caption,
         protect_content=True if pre == 'filep' else False,
         )
+    await asyncio.sleep(600)
+    await msg.delete()
                     
 
 @Client.on_message(filters.command('channel') & filters.user(ADMINS))
